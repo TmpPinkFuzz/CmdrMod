@@ -1,5 +1,30 @@
 ﻿
 
+cmdr_initialize = {
+  set_global_variable = { name = cmdr_filter_logistician value = 0 }
+  set_global_variable = { name = cmdr_filter_winter_soldier value = 0 }
+  set_global_variable = { name = cmdr_filter_organizer value = 0 }
+  set_global_variable = { name = cmdr_filter_cautious_leader value = 0 }
+  set_global_variable = { name = cmdr_filter_forest_fighter value = 0 }
+  set_global_variable = { name = cmdr_filter_rough_terrain_expert value = 0 }
+  set_global_variable = { name = cmdr_filter_open_terrain_expert value = 0 }
+  set_global_variable = { name = cmdr_filter_holy_warrior value = 0 }
+  set_global_variable = { name = cmdr_filter_reckless value = 0 }
+  set_global_variable = { name = cmdr_filter_reaver value = 0 }
+  set_global_variable = { name = cmdr_filter_jungle_stalker value = 0 }
+  set_global_variable = { name = cmdr_filter_desert_warrior value = 0 }
+  set_global_variable = { name = cmdr_filter_flexible_leader value = 0 }
+  set_global_variable = { name = cmdr_filter_forder value = 0 }
+  set_global_variable = { name = cmdr_filter_unyielding_defender value = 0 }
+  set_global_variable = { name = cmdr_filter_aggressive_attacker value = 0 }
+  set_global_variable = { name = cmdr_filter_military_engineer value = 0 }
+
+  set_variable = { name = cmdr_army value = scope:army }
+  set_variable = { name = cmdr_current value = var:cmdr_army.army_commander }
+  set_global_variable = { name = cmdr_army_location value = var:cmdr_army.location }
+  cmdr_populate_all_lists = yes
+}
+
 cmdr_populate_all_lists = {
   cmdr_populate_combat_list = yes
   cmdr_populate_movement_list = yes
