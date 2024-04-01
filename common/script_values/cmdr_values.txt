@@ -1,4 +1,15 @@
 ﻿
+cmdr_isActive = {
+  value = 0
+  if = {
+    limit = {
+      exists = var:cmdr_army
+    }
+    add = 1
+  }
+}
+    
+
 cmdr_getSpeed = {
   value = 0
   if = {

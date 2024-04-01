@@ -3,14 +3,12 @@ cmdr_army_select_commander_window = {
   scope = player
   saved_scopes = ( army }
 
-  is_shown = { always = yes  }
+  is_shown = { exists = var:cmdr_army }
   is_valid = { always = yes  }
   ai_is_valid = { always = no  }
 
   effect = { 
     debug_log = "*** cmdr_init ***"
-    set_variable = { name = cmdr_army value = scope:army }
-
     set_global_variable = { name = cmdr_filter_logistician value = 0 }
     set_global_variable = { name = cmdr_filter_winter_soldier value = 0 }
     set_global_variable = { name = cmdr_filter_organizer value = 0 }
@@ -29,6 +27,7 @@ cmdr_army_select_commander_window = {
     set_global_variable = { name = cmdr_filter_aggressive_attacker value = 0 }
     set_global_variable = { name = cmdr_filter_military_engineer value = 0 }
 
+    set_variable = { name = cmdr_army value = scope:army }
     cmdr_populate_all_lists = yes
   }
 }
@@ -73,10 +72,10 @@ cmdr_clear_all_data_gui = {
   ai_is_valid = { always = no  }
 
   effect = { 
+    remove_variable = cmdr_army
     clear_variable_list = cmdr_combat_list
     clear_variable_list = cmdr_movement_list
     clear_variable_list = cmdr_siege_list
-    remove_variable = cmdr_army
     remove_global_variable = cmdr_filter_logistician
   }
 }

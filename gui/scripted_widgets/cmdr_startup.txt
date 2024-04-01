@@ -1,0 +1,2 @@
+﻿
+gui/cmdr_army_select_commander.gui = cmdr_army_select_commander_window

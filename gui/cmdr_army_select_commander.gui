@@ -7,9 +7,9 @@ template cmdr_start_window
 { 
   shortcut = "army_change_commander"
   datacontext = "[GetScriptedGui('cmdr_army_select_commander_window')]"                   
-  onclick = "[ExecuteConsoleCommand( Select_CString( GetVariableSystem.Exists('cmdr_army_select_window'), '', 'gui.createwidget gui/cmdr_army_select_commander.gui cmdr_army_select_commander_window' ) )]"
-  onclick = "[GetVariableSystem.Set( 'cmdr_window_opened', 'true')]"
   onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'army', ArmyWindow.GetArmy.MakeScope ).End )]"
+#  onclick = "[ExecuteConsoleCommand( Select_CString( GetVariableSystem.Exists('cmdr_army_select_window'), '', 'gui.createwidget gui/cmdr_army_select_commander.gui cmdr_army_select_commander_window' ) )]"
+#  onclick = "[GetVariableSystem.Set( 'cmdr_window_opened', 'true')]"
 }
 
 types cmdr_types 
@@ -89,8 +89,9 @@ types cmdr_types
               blockoverride "button_content"
               {
                 onclick = "[GetScriptedGui('cmdr_set_commander').Execute( GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).End )]"
-                onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
-                onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
+                onclick = "[GetScriptedGui('cmdr_clear_all_data_gui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"                   # close the ui
+#                onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
+#                onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
                 cmdr_button_commander_list_item = {}
               }
             }
@@ -293,6 +294,8 @@ window = {
   using = Animation_ShowHide_Quick
 
   size = { 1460 90% }  # dkg { 620 100 }
+  visible_at_creation = no
+  visible = "[GetScriptedGui('cmdr_army_select_commander_window').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 
   vbox = {
     margin_left = 20
@@ -309,10 +312,9 @@ window = {
 
       blockoverride "button_close"
       {
-        datacontext = "[GetScriptedGui('cmdr_clear_all_lists_gui')]"
-        onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-        onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
-        onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
+        onclick = "[GetScriptedGui('cmdr_clear_all_data_gui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+#        onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
+#        onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
       }
     }
     hbox = {
@@ -467,10 +469,10 @@ window = {
       button_standard = {
         size = { 300 50 }
 
-        datacontext = "[GetScriptedGui('cmdr_remove_commander')]"
-        onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-        onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
-        onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
+        onclick = "[GetScriptedGui('cmdr_remove_commander').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+        onclick = "[GetScriptedGui('cmdr_clear_all_data_gui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
+#        onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
+#        onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
 
         text = "DETACH_COMMANDER"
         default_format = "#high"
