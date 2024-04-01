@@ -476,3 +476,19 @@ cmdr_is_knight = {
 
   is_shown = { is_knight = yes }
 }
+
+cmdr_getSpeed_display = {
+  scope = character
+
+  is_shown = { always = yes }
+  effect = {
+    custom_tooltip = "CMDR_SPEED_DISPLAY_TT"
+  }
+}
+cmdr_getSiege_display = {
+  scope = character
+
+  is_shown = { is_knight = yes }
+  effect = {
+  }
+}

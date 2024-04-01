@@ -1,13 +1,31 @@
 ﻿
 cmdr_getSpeed = {
   value = 0
-  if = { limit = { culture = { has_cultural_tradition = tradition_horse_lords } }            add = 10 }
-  if = { limit = { culture = { has_cultural_tradition = tradition_saharan_nomads } }         add = 10 }
-  if = { limit = { culture = { has_cultural_tradition = tradition_fp2_strategy_gamers } }    add = 10 }
-  if = { limit = { culture = { has_cultural_tradition = tradition_caravaneers } }            add =  5 }
+  if = {
+    limit = { culture = { has_cultural_tradition = tradition_horse_lords } }
+    add = { value = 10 desc = tradition_horse_lords_name }
+  }
+  if = { 
+    limit = { culture = { has_cultural_tradition = tradition_saharan_nomads } }
+    add = { value = 10 desc = tradition_saharan_nomads_name }
+  }
+  if = { 
+    limit = { culture = { has_cultural_tradition = tradition_fp2_strategy_gamers } }    
+    add = { value = 10 desc = tradition_fp2_strategy_games_name }
+  }
+  if = { limit = { culture = { has_cultural_tradition = tradition_caravaneers } }            
+    add = { value = 5  desc = tradition_caravaneers }
+  }
 
 #  if = { limit = { has_trait = winter_soldier OR = { current_month < 3 current_month > 9 } } add = 25 }
-  if = { limit = { has_trait = organizer }                                                   add = 25 }
+
+  if = { limit = { has_trait = organizer }
+    add = { value = 25  desc = trait_organizer }
+  }
+  if = {
+    limit = { has_perk = organized_retreat_perk NOT = { this = scope:actor } }
+    add = { value = 20 desc = trait_organizer }
+  }
 }
 
 cmdr_getSpeed_sort_value = {
@@ -25,17 +43,21 @@ cmdr_getSpeed_display = {
 
 cmdr_siege_effectiveness = {
   value = 100
+#  if = {
+#    limit = { culture = { has_cultural_tradition = tradition_hussar } }
+#    add = -20
+#  }
+#  if = {
+#    limit = { culture = { has_cultural_tradition = tradition_hit_and_run } }
+#    add = -20
+#  }
+#  if = {
+#    limit = { culture = { has_cultural_tradition = tradition_ruling_caste } }
+#    add = { value = 25 desc = FACTION_REASON_RULING_CASTE }
+#  }
   if = {
-    limit = { culture = { has_cultural_tradition = tradition_hussar } }
-    add = -20
-  }
-  if = {
-    limit = { culture = { has_cultural_tradition = tradition_hit_and_run } }
-    add = -20
-  }
-  if = {
-    limit = { culture = { has_cultural_tradition = tradition_ruling_caste } }
-    add = 25
+    limit = { dynasty ?= { has_dynasty_perk = fp1_pillage_legacy_5 } }
+    add = { value = 25 desc = fp1_pillage_legacy_5_name }
   }
 }
 
