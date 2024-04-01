@@ -100,11 +100,14 @@ types cmdr_types
 
   type cmdr_button_commander_list_item = vbox {
 
+    margin = { 0 0 }
+    spacing = 0
     hbox = {
       name = "list_item_commander_name"
       layoutpolicy_horizontal = expanding
       margin = { 2 0 }
-#      spacing = 0
+
+      max_height = 30
 
       icon = {
         name = "commander_is_leader"
@@ -116,7 +119,6 @@ types cmdr_types
 
       text_single = {
         text = "[Character.GetUINameNoTooltip]"
-
         using = Font_Size_Medium
         fontsize_min = 14
         max_width = 300
@@ -126,22 +128,24 @@ types cmdr_types
     hbox = {
       name = "list_item_commander_details_left_right_splitter"
       layoutpolicy_horizontal = expanding
-
       vbox = {
         name = "list_item_commander_details_left"
         layoutpolicy_horizontal = expanding
-        layoutpolicy_vertical   = expanding
+        layoutpolicy_vertical   = shrinking
 
         hbox = {
-          layoutpolicy_horizontal = expanding
-  
-          text_single = {
-            name = "character_relation"
-            text = "[Character.GetRelationToString( GetPlayer )]"
-            tooltip = "EXTENDED_RELATIONS_TOOLTIP"
-            default_format = "#low"
-            fontsize_min = 14
-            max_width = 250
+          layoutpolicy_horizontal = preferred
+          layoutpolicy_vertical   = shrinking
+          
+          block "character_relation" {
+            text_single = {
+              name = "character_relation"
+              text = "[Character.GetRelationToString( GetPlayer )]"
+              tooltip = "EXTENDED_RELATIONS_TOOLTIP"
+              default_format = "#low"
+              fontsize_min = 14
+              max_width = 250
+            }
           }
           expand = {}
         }
@@ -371,24 +375,24 @@ window = {
 ### current commander and trait filter bar     
     hbox = {
       size = { 100% 44 }
+      layoutpolicy_horizontal = preferred
+      margin_left = 10
 
       ### current commander widget
+      hbox = {
+        size = { %33 0 }
       widget_character_list_item = {
         size = { 430 110 }
-        visible = yes
 
-				onclick = ""
+        visible = "[GetPlayer.MakeScope.Var('cmdr_current').GetCharacter.IsValid]"
+        onclick = ""   # prevent any clicks
 
         tooltip = "[CharacterListItem.GetText('tooltip')]"
 
         datacontext = "[GetPlayer.MakeScope.Var('cmdr_current').GetCharacter]"
-        blockoverride "portrait_button"
-        {
-          grayscale = no
-        }
+        blockoverride "portrait_button" { grayscale = no }
 
-        blockoverride "widget"
-        {
+        blockoverride "widget" {
           background = {
             visible = no
 #            visible = "[Not(CharacterListItem.IsSelectable)]"
@@ -400,32 +404,60 @@ window = {
         blockoverride "button_content"
         {
           cmdr_button_commander_list_item = {
-            blockoverride = "siege_details"  { visible = yes }
-            blockoverride = "speed_details"  { visible = yes }
-            blockoverride = "knight_details" { visible = no }
+            blockoverride "character_relation"
+            {
+              text_single = {
+                name = "static_text"
+                text = "Current Army Commander"
+              }
+            }
+            blockoverride "siege_details"  { visible = yes }
+            blockoverride "speed_details"  { visible = yes }
+            blockoverride "knight_details" { visible = no }
           }
         }
       }
-
-      expand = {}
-
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('aggressive_attacker')]"    datacontext = "[GetScriptedGui('cmdr_aggressive_attacker_filter')]"    }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('cautious_leader')]"        datacontext = "[GetScriptedGui('cmdr_cautious_leader_filter')]"        }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('desert_warrior')]"         datacontext = "[GetScriptedGui('cmdr_desert_warrior_filter')]"         }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('flexible_leader')]"        datacontext = "[GetScriptedGui('cmdr_flexible_leader_filter')]"        }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('forder')]"                 datacontext = "[GetScriptedGui('cmdr_forder_filter')]"                 }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('forest_fighter')]"         datacontext = "[GetScriptedGui('cmdr_forest_fighter_filter')]"         }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('holy_warrior')]"           datacontext = "[GetScriptedGui('cmdr_holy_warrior_filter')]"           }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('jungle_stalker')]"         datacontext = "[GetScriptedGui('cmdr_jungle_stalker_filter')]"         }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('logistician')]"            datacontext = "[GetScriptedGui('cmdr_logistician_filter')]"            }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('military_engineer')]"      datacontext = "[GetScriptedGui('cmdr_military_engineer_filter')]"      }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('open_terrain_expert')]"    datacontext = "[GetScriptedGui('cmdr_open_terrain_expert_filter')]"    }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('organizer')]"              datacontext = "[GetScriptedGui('cmdr_organizer_filter')]"              }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('reaver')]"                 datacontext = "[GetScriptedGui('cmdr_reaver_filter')]"                 }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('reckless')]"               datacontext = "[GetScriptedGui('cmdr_reckless_filter')]"               }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('rough_terrain_expert')]"   datacontext = "[GetScriptedGui('cmdr_rough_terrain_expert_filter')]"   }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('unyielding_defender')]"    datacontext = "[GetScriptedGui('cmdr_unyielding_defender_filter')]"    }
-      cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('winter_soldier')]"         datacontext = "[GetScriptedGui('cmdr_winter_soldier_filter')]"         }
+      }
+      vbox = {
+        margin = { 4 0 }
+        size = { %33 0 }
+#        horizontal_align = center
+        layoutpolicy_horizontal = preferred
+        layoutpolicy_vertical = preferred
+        text_single = { text = "Current Location: [GetPlayer.MakeScope.Var('cmdr_army').Army.GetLocation.GetName]" }
+#        text_single = { text = "WinterSeverity: [GetPlayer.MakeScope.Var('cmdr_army').Army.GetMovementInfoForTooltip]" }
+        text_single = { text = "WinterSeverity: [GetPlayer.MakeScope.Var('cmdr_army').Army.GetLocation.GetWinterSeverityName]" }
+        expand = {}
+      }
+#      expand = {}
+      vbox = {
+        size = { %34 0 }
+        layoutpolicy_horizontal = fixed
+        layoutpolicy_vertical = shrinking
+        margin_right = 4
+        spacing = 0
+        hbox = {
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('aggressive_attacker')]"    datacontext = "[GetScriptedGui('cmdr_aggressive_attacker_filter')]"    }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('cautious_leader')]"        datacontext = "[GetScriptedGui('cmdr_cautious_leader_filter')]"        }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('desert_warrior')]"         datacontext = "[GetScriptedGui('cmdr_desert_warrior_filter')]"         }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('flexible_leader')]"        datacontext = "[GetScriptedGui('cmdr_flexible_leader_filter')]"        }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('forder')]"                 datacontext = "[GetScriptedGui('cmdr_forder_filter')]"                 }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('forest_fighter')]"         datacontext = "[GetScriptedGui('cmdr_forest_fighter_filter')]"         }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('holy_warrior')]"           datacontext = "[GetScriptedGui('cmdr_holy_warrior_filter')]"           }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('jungle_stalker')]"         datacontext = "[GetScriptedGui('cmdr_jungle_stalker_filter')]"         }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('logistician')]"            datacontext = "[GetScriptedGui('cmdr_logistician_filter')]"            }
+        }
+        hbox = {
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('military_engineer')]"      datacontext = "[GetScriptedGui('cmdr_military_engineer_filter')]"      }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('open_terrain_expert')]"    datacontext = "[GetScriptedGui('cmdr_open_terrain_expert_filter')]"    }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('organizer')]"              datacontext = "[GetScriptedGui('cmdr_organizer_filter')]"              }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('reaver')]"                 datacontext = "[GetScriptedGui('cmdr_reaver_filter')]"                 }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('reckless')]"               datacontext = "[GetScriptedGui('cmdr_reckless_filter')]"               }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('rough_terrain_expert')]"   datacontext = "[GetScriptedGui('cmdr_rough_terrain_expert_filter')]"   }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('unyielding_defender')]"    datacontext = "[GetScriptedGui('cmdr_unyielding_defender_filter')]"    }
+          cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('winter_soldier')]"         datacontext = "[GetScriptedGui('cmdr_winter_soldier_filter')]"         }
+        }
+      }
     }
 
     ### List of Commanders

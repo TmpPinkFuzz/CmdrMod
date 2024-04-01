@@ -1,7 +1,7 @@
-version="2.1.0"
+version="2.2.0"
 tags={
 	"Utilities"
 	"Warfare"
 }
 name="CmdrMod"
-supported_version="1.11.*"
+supported_version="1.12.*"

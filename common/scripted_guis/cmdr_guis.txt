@@ -1,20 +1,7 @@
 ﻿
-cmdr_set_current_cmdr = {
-  scope = player
-  saved_scopes = { army current_cmdr }
-
-  is_shown = { always = yes  }
-  is_valid = { always = yes  }
-  ai_is_valid = { always = no  }
-
-  effect = {
-#    set_variable = { name = cmdr_current value = current_cmdr }
-  }
-}
-
 cmdr_army_select_commander_window = {
   scope = player
-  saved_scopes = ( army }
+  saved_scopes = { army }
 
   is_shown = { exists = var:cmdr_army }
   is_valid = { always = yes  }
@@ -42,13 +29,14 @@ cmdr_army_select_commander_window = {
 
     set_variable = { name = cmdr_army value = scope:army }
     set_variable = { name = cmdr_current value = var:cmdr_army.army_commander }
+    set_global_variable = { name = cmdr_army_location value = var:cmdr_army.location }
     cmdr_populate_all_lists = yes
   }
 }
 
 cmdr_set_commander = {
   scope = character
-  saved_scopes = ( actor }
+  saved_scopes = { actor }
 
   is_shown = { always = yes  }
   is_valid = { always = yes  }
@@ -73,9 +61,7 @@ cmdr_remove_commander = {
   ai_is_valid = { always = no  }
 
   effect = { 
-    var:cmdr_army = {
-      remove_commander = yes
-    }
+    var:cmdr_army = { remove_commander = yes }
   }
 }
 
@@ -93,6 +79,7 @@ cmdr_clear_all_data_gui = {
     clear_variable_list = cmdr_movement_list
     clear_variable_list = cmdr_siege_list
     remove_global_variable = cmdr_filter_logistician
+    remove_global_variable = cmdr_army_location
   }
 }
 

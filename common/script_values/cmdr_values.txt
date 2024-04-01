@@ -7,19 +7,64 @@ cmdr_isActive = {
   }
 }
 
+#cmdr_army_winter = {
+#  value = 0
+#  if = {
+#    limit = { end_of_year_season_trigger = yes }
+#    add = 1
+#  }
+#}
+#
+#cmdr_army_location_exists = {
+#  value = 0
+#  if = {
+#    limit = {
+#      exists = global_var:cmdr_army_location
+#    }
+#    add = 1
+#  }
+#}
+
+cmdr_army_location_winter_severity = {
+  value = 0
+  if = {
+    limit = {
+      end_of_year_season_trigger = yes
+      exists = global_var:cmdr_army_location
+    }
+    global_var:cmdr_army_location = {
+      if = { limit = { has_province_modifier = winter_mild_modifier }   add = 1 }
+      if = { limit = { has_province_modifier = winter_normal_modifier } add = 2 }
+      if = { limit = { has_province_modifier = winter_harsh_modifier }  add = 3 }
+    }
+  }
+}
+
 cmdr_getSpeed = {
   value = 0
+
+# traditions
   if = { limit = { culture = { has_cultural_tradition = tradition_horse_lords } }           add = { value = 10  desc = tradition_horse_lords_name } }
   if = { limit = { culture = { has_cultural_tradition = tradition_saharan_nomads } }        add = { value = 10  desc = tradition_saharan_nomads_name } }
   if = { limit = { culture = { has_cultural_tradition = tradition_caravaneers } }           add = { value = 5   desc = tradition_caravaneers_name } }
   if = { limit = { culture = { has_cultural_tradition = tradition_fp2_strategy_gamers } }   add = { value = 10  desc = tradition_fp2_strategy_games_name } }
   if = { limit = { culture = { has_cultural_tradition = tradition_fp3_frontier_warriors } } add = { value = 5   desc = tradition_fp3_frontier_warriors_name } }
 
-  if = { limit = { has_trait = winter_soldier OR = { current_month < 3 current_month > 9 } } add = { value = 25 desc = trait_winter_soldier } }
-
+# traits
   if = { limit = { has_trait = education_martial_5 }                                        add = { value = 20  desc = trait_education_martial_5 } }
   if = { limit = { has_trait = organizer }                                                  add = { value = 25  desc = trait_organizer } }
   if = { limit = { has_perk = organized_retreat_perk NOT = { this = scope:actor } }         add = { value = 15  desc = organized_retreat_perk_name } }
+
+# winter soldier trait - checking current army location if possible
+  if = { limit = { has_trait = winter_soldier }
+    if = { 
+      limit = { cmdr_army_location_winter_severity > 0 }
+      add = { value = 25 desc = trait_winter_soldier }
+    }
+    else = {
+#      add = { value = 25 desc = trait_winter_soldier }
+    }
+  }
 }
 
 cmdr_getSpeed_sort_value = {
