@@ -2,41 +2,24 @@
 cmdr_isActive = {
   value = 0
   if = {
-    limit = {
-      exists = var:cmdr_army
-    }
+    limit = { exists = var:cmdr_army }
     add = 1
   }
 }
-    
 
 cmdr_getSpeed = {
   value = 0
-  if = {
-    limit = { culture = { has_cultural_tradition = tradition_horse_lords } }
-    add = { value = 10 desc = tradition_horse_lords_name }
-  }
-  if = { 
-    limit = { culture = { has_cultural_tradition = tradition_saharan_nomads } }
-    add = { value = 10 desc = tradition_saharan_nomads_name }
-  }
-  if = { 
-    limit = { culture = { has_cultural_tradition = tradition_fp2_strategy_gamers } }    
-    add = { value = 10 desc = tradition_fp2_strategy_games_name }
-  }
-  if = { limit = { culture = { has_cultural_tradition = tradition_caravaneers } }            
-    add = { value = 5  desc = tradition_caravaneers }
-  }
+  if = { limit = { culture = { has_cultural_tradition = tradition_horse_lords } }           add = { value = 10  desc = tradition_horse_lords_name } }
+  if = { limit = { culture = { has_cultural_tradition = tradition_saharan_nomads } }        add = { value = 10  desc = tradition_saharan_nomads_name } }
+  if = { limit = { culture = { has_cultural_tradition = tradition_caravaneers } }           add = { value = 5   desc = tradition_caravaneers_name } }
+  if = { limit = { culture = { has_cultural_tradition = tradition_fp2_strategy_gamers } }   add = { value = 10  desc = tradition_fp2_strategy_games_name } }
+  if = { limit = { culture = { has_cultural_tradition = tradition_fp3_frontier_warriors } } add = { value = 5   desc = tradition_fp3_frontier_warriors_name } }
 
-#  if = { limit = { has_trait = winter_soldier OR = { current_month < 3 current_month > 9 } } add = 25 }
+  if = { limit = { has_trait = winter_soldier OR = { current_month < 3 current_month > 9 } } add = { value = 25 desc = trait_winter_soldier } }
 
-  if = { limit = { has_trait = organizer }
-    add = { value = 25  desc = trait_organizer }
-  }
-  if = {
-    limit = { has_perk = organized_retreat_perk NOT = { this = scope:actor } }
-    add = { value = 20 desc = trait_organizer }
-  }
+  if = { limit = { has_trait = education_martial_5 }                                        add = { value = 20  desc = trait_education_martial_5 } }
+  if = { limit = { has_trait = organizer }                                                  add = { value = 25  desc = trait_organizer } }
+  if = { limit = { has_perk = organized_retreat_perk NOT = { this = scope:actor } }         add = { value = 15  desc = organized_retreat_perk_name } }
 }
 
 cmdr_getSpeed_sort_value = {
@@ -67,8 +50,10 @@ cmdr_siege_effectiveness = {
 #    add = { value = 25 desc = FACTION_REASON_RULING_CASTE }
 #  }
   if = {
-    limit = { dynasty ?= { has_dynasty_perk = fp1_pillage_legacy_5 } }
-    add = { value = 25 desc = fp1_pillage_legacy_5_name }
+    limit = { exists = this }
+    if = { limit = { culture = { has_cultural_tradition = tradition_ruling_caste } }          add = { value = 25  desc = tradition_ruling_caste_name } }
+    if = { limit = { dynasty ?= { has_dynasty_perk = fp1_pillage_legacy_5 } }                 add = { value = 25  desc = fp1_pillage_legacy_5_name } }
+    if = { limit = { has_trait = education_martial_5 }                                        add = { value = 50  desc = trait_education_martial_5 } }
   }
 }
 
@@ -86,27 +71,23 @@ cmdr_getSiege_display = {
 }
 
 cmdr_getAdvantage = {
-  value = martial
+  value = 0
   if = {
-    limit = { this = scope:actor }        # leading own soldiers
-    add = 5
-  }
-  if = {
-    limit = { has_perk = never_back_down_perk }
-    add = 5
-  }
-  if = {
-    limit = { culture = { has_cultural_tradition = tradition_hussar } }
-    add = -2
-  }
-  if = {
-    limit = { culture = { has_cultural_tradition = tradition_hit_and_run } }
-    add = -2
+    limit = { exists = this }
+    add = martial
+    if = { limit = { this = scope:actor }                                           add = 5 }     # leading own soldiers
+    if = { limit = { has_perk = never_back_down_perk }                              add = 5 }
+    if = { limit = { culture = { has_cultural_tradition = tradition_hussar } }      add = -2 }
+    if = { limit = { culture = { has_cultural_tradition = tradition_hit_and_run } } add = -2 }
   }
 }
 
 cmdr_getAdvantage_sort_value = {
-  value = cmdr_getAdvantage
+  value = 0
+  if = {
+    limit = { exists = this }
+    add = cmdr_getAdvantage
+  }
 }
 
 cmdr_filter_logistician           = { value = global_var:cmdr_filter_logistician }

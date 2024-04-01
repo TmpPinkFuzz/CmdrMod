@@ -6,10 +6,8 @@
 template cmdr_start_window
 { 
   shortcut = "army_change_commander"
-  datacontext = "[GetScriptedGui('cmdr_army_select_commander_window')]"                   
-  onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'army', ArmyWindow.GetArmy.MakeScope ).End )]"
-#  onclick = "[ExecuteConsoleCommand( Select_CString( GetVariableSystem.Exists('cmdr_army_select_window'), '', 'gui.createwidget gui/cmdr_army_select_commander.gui cmdr_army_select_commander_window' ) )]"
-#  onclick = "[GetVariableSystem.Set( 'cmdr_window_opened', 'true')]"
+  onclick = "[GetScriptedGui('cmdr_army_select_commander_window').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'army', ArmyWindow.GetArmy.MakeScope ).End )]"
+#  onclick = "[GetScriptedGui('cmdr_set_current_cmdr').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).AddScope( 'army', ArmyWindow.GetArmy.MakeScope ).AddScope( 'current_cmdr', ArmyWindow.GetArmy.GetCommander.MakeScope ).End )]"
 }
 
 types cmdr_types 
@@ -41,6 +39,7 @@ types cmdr_types
   {
     layoutpolicy_horizontal = expanding
     layoutpolicy_vertical = expanding
+    margin = { 0 0 }
 
     min_width = 460
     max_width = 460
@@ -58,14 +57,14 @@ types cmdr_types
         visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
         datamodel_reuse_widgets = yes
         addcolumn = 430
-        addrow = 110
+        addrow = 100
 
         item = {
           widget = {
-            size = { 430 110 }
+            size = { 430 100 }
 
             widget_character_list_item = {
-              size = { 430 110 }
+              size = { 430 100 }
               visible = "[Not(Character.IsPlayerInteractionShown('recruit_guest_interaction'))]"
 
               datacontext = "[Scope.GetCharacter]"
@@ -82,7 +81,7 @@ types cmdr_types
                 background = {
                   visible = "[Not(CharacterListItem.IsSelectable)]"
                   using = Background_Area
-                  margin_bottom = -4
+#                  margin_bottom = -4
                 }
               }
 
@@ -90,8 +89,6 @@ types cmdr_types
               {
                 onclick = "[GetScriptedGui('cmdr_set_commander').Execute( GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).End )]"
                 onclick = "[GetScriptedGui('cmdr_clear_all_data_gui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"                   # close the ui
-#                onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
-#                onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
                 cmdr_button_commander_list_item = {}
               }
             }
@@ -102,16 +99,17 @@ types cmdr_types
   }
 
   type cmdr_button_commander_list_item = vbox {
-    margin = { 2 2 }
 
     hbox = {
+      name = "list_item_commander_name"
       layoutpolicy_horizontal = expanding
-      spacing = 2
+      margin = { 2 0 }
+#      spacing = 0
 
       icon = {
         name = "commander_is_leader"
         visible = "[Character.IsLocalPlayer]"
-        size = {30 30}
+        size = { 30 30 }
         texture = "gfx/interface/icons/commander_is_leader.dds"
         tooltip = "POTENTIAL_COMMANDER_IS_LEADER_TOOLTIP"
       }
@@ -125,159 +123,210 @@ types cmdr_types
       }
       expand = {}
     }
-
     hbox = {
+      name = "list_item_commander_details_left_right_splitter"
       layoutpolicy_horizontal = expanding
 
-      text_single = {
-        name = "character_relation"
-        text = "[Character.GetRelationToString( GetPlayer )]"
-        tooltip = "EXTENDED_RELATIONS_TOOLTIP"
-        default_format = "#low"
-        fontsize_min = 14
+      vbox = {
+        name = "list_item_commander_details_left"
+        layoutpolicy_horizontal = expanding
+        layoutpolicy_vertical   = expanding
+
+        hbox = {
+          layoutpolicy_horizontal = expanding
+  
+          text_single = {
+            name = "character_relation"
+            text = "[Character.GetRelationToString( GetPlayer )]"
+            tooltip = "EXTENDED_RELATIONS_TOOLTIP"
+            default_format = "#low"
+            fontsize_min = 14
+            max_width = 250
+          }
+          expand = {}
+        }
+
+        hbox = {
+          name = "skill_and_traits"
+          layoutpolicy_horizontal = expanding
+          margin_right = 2
+          spacing = 5
+
+          hbox = {
+            tooltip = "[Character.GetCommanderLeadingOwnAdvantageDesc( GetPlayer )]"
+
+            icon = {
+              name = "skill_icon"
+              texture = "gfx/interface/icons/icon_commander_advantage.dds"
+              size = { 40 40 }
+
+              background = {
+                name = "skill_icon_bg"
+                texture = "gfx/interface/window_character/character_view_skills_bg.dds"
+                framesize = { 70 26 }
+                frame = "[CharacterListItem.GetMartialSkill.GetFrame]"
+              }
+            }
+
+            text_single = {
+              name = "skill_value"
+              text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getAdvantage')|0]"
+    #          text = "[Character.GetCommanderAdvantage]"    # this works for everyone but the ruler, as it doesn't count the leading own troops bonus
+              default_format = "#high"
+              using = Font_Size_Big
+            }
+          }
+
+          hbox = {
+            name = "traits_grid"
+    ###########################################
+    # this would have been so much easier if paradox implemented a way to check the category of a trait inside the gui code
+    #        datamodel = "[Character.GetTraitIndices]"
+    #        item = {
+    #          cmdr_icon_trait = {
+    #            datacontext = "[GetTraitForIndex(int32.GetInt)]"
+    #            visible = "[And(Not(Trait.IsCommander),Not(Trait.IsDisease))]"
+    #
+    #            blockoverride "icon_size" {
+    #              size = { 40 40 }
+    #            }
+    #
+    #            blockoverride "glow_radius"
+    #            {
+    #              glow_radius = 4
+    #            }
+    #          }
+    #        }
+            cmdr_icon_trait = { datacontext = "[GetTrait('logistician')]"           visible = "[GetScriptedGui('cmdr_has_logistician').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('military_engineer')]"     visible = "[GetScriptedGui('cmdr_has_military_engineer').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('aggressive_attacker')]"   visible = "[GetScriptedGui('cmdr_has_aggressive_attacker').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('unyielding_defender')]"   visible = "[GetScriptedGui('cmdr_has_unyielding_defender').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('forder')]"                visible = "[GetScriptedGui('cmdr_has_forder').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]"        }
+            cmdr_icon_trait = { datacontext = "[GetTrait('flexible_leader')]"       visible = "[GetScriptedGui('cmdr_has_flexible_leader').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('desert_warrior')]"        visible = "[GetScriptedGui('cmdr_has_desert_warrior').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('jungle_stalker')]"        visible = "[GetScriptedGui('cmdr_has_jungle_stalker').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('reaver')]"                visible = "[GetScriptedGui('cmdr_has_reaver').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('reckless')]"              visible = "[GetScriptedGui('cmdr_has_reckless').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('holy_warrior')]"          visible = "[GetScriptedGui('cmdr_has_holy_warrior').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('open_terrain_expert')]"   visible = "[GetScriptedGui('cmdr_has_open_terrain_expert').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('rough_terrain_expert')]"  visible = "[GetScriptedGui('cmdr_has_rough_terrain_expert').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('forest_fighter')]"        visible = "[GetScriptedGui('cmdr_has_forest_fighter').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('cautious_leader')]"       visible = "[GetScriptedGui('cmdr_has_cautious_leader').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('organizer')]"             visible = "[GetScriptedGui('cmdr_has_organizer').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('winter_soldier')]"        visible = "[GetScriptedGui('cmdr_has_winter_soldier').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('blind')]"                 visible = "[GetScriptedGui('cmdr_has_blind').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('ill')]"                   visible = "[GetScriptedGui('cmdr_has_ill').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('pneumonic')]"             visible = "[GetScriptedGui('cmdr_has_pneumonic').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('great_pox')]"             visible = "[GetScriptedGui('cmdr_has_great_pox').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('early_great_pox')]"       visible = "[GetScriptedGui('cmdr_has_early_great_pox').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('lovers_pox')]"            visible = "[GetScriptedGui('cmdr_has_lovers_pox').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('leper')]"                 visible = "[GetScriptedGui('cmdr_has_leper').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('wounded_1')]"             visible = "[GetScriptedGui('cmdr_has_wounded_1').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('wounded_2')]"             visible = "[GetScriptedGui('cmdr_has_wounded_2').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('wounded_3')]"             visible = "[GetScriptedGui('cmdr_has_wounded_3').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('maimed')]"                visible = "[GetScriptedGui('cmdr_has_maimed').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('one_eyed')]"              visible = "[GetScriptedGui('cmdr_has_one_eyed').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('one_legged')]"            visible = "[GetScriptedGui('cmdr_has_one_legged').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('disfigured')]"            visible = "[GetScriptedGui('cmdr_has_disfigured').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('infirm')]"                visible = "[GetScriptedGui('cmdr_has_infirm').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('incapable')]"             visible = "[GetScriptedGui('cmdr_has_incapable').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('gout_ridden')]"           visible = "[GetScriptedGui('cmdr_has_gout_ridden').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('consumption')]"           visible = "[GetScriptedGui('cmdr_has_consumption').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('cancer')]"                visible = "[GetScriptedGui('cmdr_has_cancer').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('typhus')]"                visible = "[GetScriptedGui('cmdr_has_typhus').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('bubonic_plague')]"        visible = "[GetScriptedGui('cmdr_has_bubonic_plague').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+            cmdr_icon_trait = { datacontext = "[GetTrait('smallpox')]"              visible = "[GetScriptedGui('cmdr_has_smallpox').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
+          }
+          expand = {}
+        }
+        expand = { }
       }
-
-      expand = {}
-    }
-
-    hbox = {
-      name = "skill_and_traits"
-      layoutpolicy_horizontal = expanding
-      margin_right = 2
-      spacing = 5
+      expand = { }
 
       hbox = {
-        tooltip = "[Character.GetCommanderLeadingOwnAdvantageDesc( GetPlayer )]"
+        name = "list_item_commander_details_right"
+        layoutpolicy_horizontal = expanding
+        layoutpolicy_vertical   = expanding
+        datacontext="[GetScriptedGui('cmdr_is_knight')]"
+        min_width = 60
+        max_width = 60
 
-        icon = {
-          name = "skill_icon"
-          texture = "gfx/interface/icons/icon_commander_advantage.dds"
-          size = { 40 40 }
+        background = {
+#            visible = "[Character.IsKnightInSpecificArmy( Army.Self )]"
+#          visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]"
+          visible = no
+          using = Background_Area
+          margin = { 0 0 }
+#            margin_bottom = 3
+        }
 
-          background = {
-            name = "skill_icon_bg"
-            texture = "gfx/interface/window_character/character_view_skills_bg.dds"
-            framesize = { 70 26 }
-            frame = "[CharacterListItem.GetMartialSkill.GetFrame]"
+        vbox = {
+          margin = { 8 2 }
+          min_width = 60
+          max_width = 60
+          hbox = {
+            block "speed_details" { visible = no }
+            icon = {
+              name = "speed_icon"
+              size = { 32 24 }
+              texture = "gfx/interface/icons/combat_effects/moving_army.dds"
+            }
+            text_single = {
+              name = "speed_value"
+              text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getSpeed_display')|+0%]"
+              tooltip = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).GetScriptValueDesc('cmdr_getSpeed_display')]"
+              default_format = "#high"
+            }
+          }
+          hbox = {
+            block "siege_details" { visible = no }
+            icon = {
+              name = "speed_icon"
+              size = { 32 24 }
+              texture = "gfx/interface/icons/message_feed/siege.dds"
+            }
+            text_single = {
+              name = "siege_value"
+              text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getSiege_display')|+0%]"
+              tooltip = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).GetScriptValueDesc('cmdr_getSiege_display')]"
+              default_format = "#high"
+            }
+          }
+          hbox = {
+            block "knight_details" {
+              visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]"
+            }
+#            visible = "[Character.IsKnightInArmy]"
+            tooltip = "[Character.GetProwessBreakdown]"
+
+            icon = {
+              size = { 25 25 }
+              visible = "[Character.IsKnightInSpecificArmy( Army.Self )]"
+              texture = "gfx/interface/icons/portraits/knight.dds"
+              tooltip = "KNIGHT_IN_THIS_ARMY_TOOLTIP"
+            }
+
+            icon = {
+              name = "prowess_icon"
+              size = { 35 35 }
+              texture = "gfx/interface/icons/icon_prowess.dds"
+            }
+
+            text_single = {
+              name = "prowess_value"
+              text = "[Character.GetProwess|0]"
+              default_format = "#high"
+            }
           }
         }
 
-        text_single = {
-          name = "skill_value"
-          text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getAdvantage')|0]"
-#          text = "[Character.GetCommanderAdvantage]"    # this works for everyone but the ruler, as it doesn't count the leading own troops bonus
-          default_format = "#high"
-          using = Font_Size_Big
-        }
-      }
-
-      hbox = {
-        name = "traits_grid"
-###########################################
-# this would have been so much easier if paradox implemented a way to check the category of a trait inside the gui code
-#        datamodel = "[Character.GetTraitIndices]"
-#        item = {
-#          cmdr_icon_trait = {
-#            datacontext = "[GetTraitForIndex(int32.GetInt)]"
-#            visible = "[And(Not(Trait.IsCommander),Not(Trait.IsDisease))]"
-#
-#            blockoverride "icon_size" {
-#              size = { 40 40 }
-#            }
-#
-#            blockoverride "glow_radius"
-#            {
-#              glow_radius = 4
-#            }
-#          }
-#        }
-        cmdr_icon_trait = { datacontext = "[GetTrait('logistician')]"           visible = "[GetScriptedGui('cmdr_has_logistician').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('military_engineer')]"     visible = "[GetScriptedGui('cmdr_has_military_engineer').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('aggressive_attacker')]"   visible = "[GetScriptedGui('cmdr_has_aggressive_attacker').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('unyielding_defender')]"   visible = "[GetScriptedGui('cmdr_has_unyielding_defender').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('forder')]"                visible = "[GetScriptedGui('cmdr_has_forder').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]"        }
-        cmdr_icon_trait = { datacontext = "[GetTrait('flexible_leader')]"       visible = "[GetScriptedGui('cmdr_has_flexible_leader').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('desert_warrior')]"        visible = "[GetScriptedGui('cmdr_has_desert_warrior').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('jungle_stalker')]"        visible = "[GetScriptedGui('cmdr_has_jungle_stalker').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('reaver')]"                visible = "[GetScriptedGui('cmdr_has_reaver').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('reckless')]"              visible = "[GetScriptedGui('cmdr_has_reckless').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('holy_warrior')]"          visible = "[GetScriptedGui('cmdr_has_holy_warrior').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('open_terrain_expert')]"   visible = "[GetScriptedGui('cmdr_has_open_terrain_expert').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('rough_terrain_expert')]"  visible = "[GetScriptedGui('cmdr_has_rough_terrain_expert').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('forest_fighter')]"        visible = "[GetScriptedGui('cmdr_has_forest_fighter').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('cautious_leader')]"       visible = "[GetScriptedGui('cmdr_has_cautious_leader').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('organizer')]"             visible = "[GetScriptedGui('cmdr_has_organizer').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('winter_soldier')]"        visible = "[GetScriptedGui('cmdr_has_winter_soldier').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('blind')]"                 visible = "[GetScriptedGui('cmdr_has_blind').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('ill')]"                   visible = "[GetScriptedGui('cmdr_has_ill').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('pneumonic')]"             visible = "[GetScriptedGui('cmdr_has_pneumonic').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('great_pox')]"             visible = "[GetScriptedGui('cmdr_has_great_pox').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('early_great_pox')]"       visible = "[GetScriptedGui('cmdr_has_early_great_pox').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('lovers_pox')]"            visible = "[GetScriptedGui('cmdr_has_lovers_pox').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('leper')]"                 visible = "[GetScriptedGui('cmdr_has_leper').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('wounded_1')]"             visible = "[GetScriptedGui('cmdr_has_wounded_1').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('wounded_2')]"             visible = "[GetScriptedGui('cmdr_has_wounded_2').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('wounded_3')]"             visible = "[GetScriptedGui('cmdr_has_wounded_3').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('maimed')]"                visible = "[GetScriptedGui('cmdr_has_maimed').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('one_eyed')]"              visible = "[GetScriptedGui('cmdr_has_one_eyed').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('one_legged')]"            visible = "[GetScriptedGui('cmdr_has_one_legged').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('disfigured')]"            visible = "[GetScriptedGui('cmdr_has_disfigured').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('infirm')]"                visible = "[GetScriptedGui('cmdr_has_infirm').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('incapable')]"             visible = "[GetScriptedGui('cmdr_has_incapable').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('gout_ridden')]"           visible = "[GetScriptedGui('cmdr_has_gout_ridden').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('consumption')]"           visible = "[GetScriptedGui('cmdr_has_consumption').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('cancer')]"                visible = "[GetScriptedGui('cmdr_has_cancer').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('typhus')]"                visible = "[GetScriptedGui('cmdr_has_typhus').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('bubonic_plague')]"        visible = "[GetScriptedGui('cmdr_has_bubonic_plague').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-        cmdr_icon_trait = { datacontext = "[GetTrait('smallpox')]"              visible = "[GetScriptedGui('cmdr_has_smallpox').IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]" }
-      }
-
-      expand = {}
-
-        hbox = {
-          datacontext="[GetScriptedGui('cmdr_is_knight')]"
-          block = "se_stat_display" {
-            background = {
-#              visible = "[Character.IsKnightInSpecificArmy( Army.Self )]"
-              visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]"
-              using = Background_Area
-              margin = { 10 0 }
-              margin_bottom = 3
-            }
-
-    #        icon = {
-    #          size = { 25 25 }
-    #          visible = "[Character.IsKnightInSpecificArmy( Army.Self )]"
-    #          texture = "gfx/interface/icons/portraits/knight.dds"
-    #          tooltip = "KNIGHT_IN_THIS_ARMY_TOOLTIP"
-    #        }
-
-            hbox = {
-              visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( Character.MakeScope ).End )]"
-#              visible = "[Character.IsKnightInArmy]"
-              tooltip = "[Character.GetProwessBreakdown]"
-
-              icon = {
-                name = "prowess_icon"
-                size = { 35 35 }
-                texture = "gfx/interface/icons/icon_prowess.dds"
-              }
-
-              text_single = {
-                name = "prowess_value"
-                text = "[Character.GetProwess|0]"
-                default_format = "#high"
-              }
-            }
-
-          # text_single = {
-          #   name = "knight_in_an_army"
-          #   visible = "[Not( Character.IsKnightInSpecificArmy( Army.Self ) )]"
-          #   text = "KNIGHT_IN_ARMY_TOOLTIP"
-          #   fontsize_min = 14
-          #   max_width = 200
-          # }
-        }
+        # text_single = {
+        #   name = "knight_in_an_army"
+        #   visible = "[Not( Character.IsKnightInSpecificArmy( Army.Self ) )]"
+        #   text = "KNIGHT_IN_ARMY_TOOLTIP"
+        #   fontsize_min = 14
+        #   max_width = 200
+        # }
       }
     }
   }
@@ -298,27 +347,68 @@ window = {
   visible = "[GetScriptedGui('cmdr_army_select_commander_window').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 
   vbox = {
-    margin_left = 20
+    margin_left = 40
     margin_right = 40
     margin_top = 8
     margin_bottom = 14
 
+### header block ( everything above the commander lists )
     header_pattern = {
       layoutpolicy_horizontal = expanding
+
+      ### caption text
       blockoverride "header_text"
       {
         text = "CMDR_SELECT_COMMANDER_CAPTION"
       }
 
+      ### close button
       blockoverride "button_close"
       {
         onclick = "[GetScriptedGui('cmdr_clear_all_data_gui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-#        onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
-#        onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
       }
     }
+### current commander and trait filter bar     
     hbox = {
       size = { 100% 44 }
+
+      ### current commander widget
+      widget_character_list_item = {
+        size = { 430 110 }
+        visible = yes
+
+				onclick = ""
+
+        tooltip = "[CharacterListItem.GetText('tooltip')]"
+
+        datacontext = "[GetPlayer.MakeScope.Var('cmdr_current').GetCharacter]"
+        blockoverride "portrait_button"
+        {
+          grayscale = no
+        }
+
+        blockoverride "widget"
+        {
+          background = {
+            visible = no
+#            visible = "[Not(CharacterListItem.IsSelectable)]"
+            using = Background_Area
+            margin_bottom = -4
+          }
+        }
+
+        blockoverride "button_content"
+        {
+          cmdr_button_commander_list_item = {
+            blockoverride = "siege_details"  { visible = yes }
+            blockoverride = "speed_details"  { visible = yes }
+            blockoverride = "knight_details" { visible = no }
+          }
+        }
+      }
+
+      expand = {}
+
       cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('aggressive_attacker')]"    datacontext = "[GetScriptedGui('cmdr_aggressive_attacker_filter')]"    }
       cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('cautious_leader')]"        datacontext = "[GetScriptedGui('cmdr_cautious_leader_filter')]"        }
       cmdr_icon_trait_button = { datacontext = "[GetPlayer]"   datacontext = "[GetTrait('desert_warrior')]"         datacontext = "[GetScriptedGui('cmdr_desert_warrior_filter')]"         }
@@ -348,7 +438,6 @@ window = {
         layoutpolicy_vertical = expanding
 
         hbox = {
-          margin_left = 24
           layoutpolicy_horizontal = expanding
           layoutpolicy_vertical = fixed
           text_single = {
@@ -375,7 +464,6 @@ window = {
         layoutpolicy_vertical = expanding
 
         hbox = {
-          margin_left = 24
           layoutpolicy_horizontal = expanding
           layoutpolicy_vertical = fixed
           text_single = {
@@ -401,26 +489,8 @@ window = {
             margin = { 10 0 }
             margin_bottom = 3
           }
-          blockoverride = "se_stat_display" 
-          {
-#            visible = "[Character.IsKnightInArmy]"
-#            tooltip = "[Character.GetProwessBreakdown]"
-            icon = {
-              name = "speed_icon"
-              size = { 35 35 }
-              texture = "gfx/interface/icons/combat_effects/moving_army.dds"
-            }
-            
-            text_single = {
-              name = "speed_value"
-#              text = "[Character.GetSkill('martial')]"
-#              tooltip = "martial_concept"
-              text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getSpeed_display')|+0%]"
-#              tooltip = "[GetScriptedGui( 'cmdr_getSpeed_display' ).BuildTooltip( SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).End )]"
-#              tooltip = "[GetScriptedGui( 'cmdr_getSpeed_display' ).BuildTooltip( GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).End )]"
-              default_format = "#high"
-            }
-          }
+          blockoverride = "speed_details"  { visible = yes }
+          blockoverride = "knight_details" { visible = no }
         }
       }
       vbox = {
@@ -448,18 +518,9 @@ window = {
             visible = "[IsDataModelEmpty( GetPlayer.MakeScope.GetList('cmdr_siege_list'))]"
             text = "NO_CHARACTERS_TO_SELECT"
           }
-          blockoverride = "se_stat_display" 
-          {
-            text_single = {
-              name = "speed_value"
-# debugging aid 
-#              text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getSiege_sort_value')]"
-              text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getSiege_display')|+0%]"
-#              tooltip = "[GetScriptedGui( 'cmdr_getSiege_display' ).BuildTooltip( SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).End )]"
-#COMMANDER_ADVANTAGE_DESC:1 "#T Commander [advantage|E]: $ADVANTAGE$#!\nMartial skill: $SKILL|+=$\n$MODIFIERS$"
-              default_format = "#high"
-            }
-          }
+          blockoverride = "siege_details"  { visible = yes }
+          blockoverride = "speed_details"  { visible = yes }
+          blockoverride = "knight_details" { visible = no }
         }
       }
     }
@@ -471,8 +532,6 @@ window = {
 
         onclick = "[GetScriptedGui('cmdr_remove_commander').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
         onclick = "[GetScriptedGui('cmdr_clear_all_data_gui').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
-#        onclick = "[ExecuteConsoleCommand('gui.clearwidgets cmdr_army_select_commander_window')]"
-#        onclick = "[GetVariableSystem.Clear('cmdr_window_opened')]"
 
         text = "DETACH_COMMANDER"
         default_format = "#high"
