@@ -52,7 +52,7 @@ cmdr_set_commander = {
 }
 
 cmdr_remove_commander = {
-  scope = character
+  scope = player
   saved_scopes = ( actor }
 
   is_shown = { always = yes  }
@@ -60,11 +60,8 @@ cmdr_remove_commander = {
   ai_is_valid = { always = no  }
 
   effect = { 
-    save_scope_as = commander
-    scope:actor = {
-      var:cmdr_army = {
-        remove_commander = yes
-      }
+    var:cmdr_army = {
+      remove_commander = yes
     }
   }
 }

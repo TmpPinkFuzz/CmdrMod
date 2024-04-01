@@ -5,6 +5,7 @@
 
 template cmdr_start_window
 { 
+  shortcut = "army_change_commander"
   datacontext = "[GetScriptedGui('cmdr_army_select_commander_window')]"                   
   onclick = "[ExecuteConsoleCommand( Select_CString( GetVariableSystem.Exists('cmdr_army_select_window'), '', 'gui.createwidget gui/cmdr_army_select_commander.gui cmdr_army_select_commander_window' ) )]"
   onclick = "[GetVariableSystem.Set( 'cmdr_window_opened', 'true')]"
@@ -315,95 +316,23 @@ window = {
     }
     hbox = {
       size = { 100% 44 }
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_logistician_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/logistician.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_military_engineer_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/military_engineer.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_aggressive_attacker_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/aggressive_attacker.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_unyielding_defender_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/unyielding_defender.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_forder_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/forder.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_flexible_leader_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/flexible_leader.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_desert_warrior_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/desert_warrior.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_jungle_stalker_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/jungle_stalker.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_reaver_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/reaver.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_reckless_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/reckless.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_holy_warrior_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/holy_warrior.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_open_terrain_expert_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/open_terrain_expert.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_rough_terrain_expert_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/rough_terrain_expert.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_forest_fighter_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/forest_fighter.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_cautious_leader_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/cautious_leader.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_organizer_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/organizer.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_winter_soldier_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/winter_soldier.dds" }
-      }
-
-      cmdr_icon_trait_button = {
-        datacontext = "[GetScriptedGui('cmdr_forder_filter')]"
-        blockoverride "icon" { texture = "gfx/interface/icons/traits/forder.dds" }
-      }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_aggressive_attacker_filter')]"     blockoverride "icon" { texture = "gfx/interface/icons/traits/aggressive_attacker.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_cautious_leader_filter')]"         blockoverride "icon" { texture = "gfx/interface/icons/traits/cautious_leader.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_desert_warrior_filter')]"          blockoverride "icon" { texture = "gfx/interface/icons/traits/desert_warrior.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_flexible_leader_filter')]"         blockoverride "icon" { texture = "gfx/interface/icons/traits/flexible_leader.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_forder_filter')]"                  blockoverride "icon" { texture = "gfx/interface/icons/traits/forder.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_forest_fighter_filter')]"          blockoverride "icon" { texture = "gfx/interface/icons/traits/forest_fighter.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_holy_warrior_filter')]"            blockoverride "icon" { texture = "gfx/interface/icons/traits/holy_warrior.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_jungle_stalker_filter')]"          blockoverride "icon" { texture = "gfx/interface/icons/traits/jungle_stalker.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_logistician_filter')]"             blockoverride "icon" { texture = "gfx/interface/icons/traits/logistician.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_military_engineer_filter')]"       blockoverride "icon" { texture = "gfx/interface/icons/traits/military_engineer.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_open_terrain_expert_filter')]"     blockoverride "icon" { texture = "gfx/interface/icons/traits/open_terrain_expert.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_organizer_filter')]"               blockoverride "icon" { texture = "gfx/interface/icons/traits/organizer.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_reaver_filter')]"                  blockoverride "icon" { texture = "gfx/interface/icons/traits/reaver.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_reckless_filter')]"                blockoverride "icon" { texture = "gfx/interface/icons/traits/reckless.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_rough_terrain_expert_filter')]"    blockoverride "icon" { texture = "gfx/interface/icons/traits/rough_terrain_expert.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_unyielding_defender_filter')]"     blockoverride "icon" { texture = "gfx/interface/icons/traits/unyielding_defender.dds" } }
+      cmdr_icon_trait_button = { datacontext = "[GetScriptedGui('cmdr_winter_soldier_filter')]"          blockoverride "icon" { texture = "gfx/interface/icons/traits/winter_soldier.dds" } }
     }
 
     ### List of Commanders
@@ -516,6 +445,8 @@ window = {
           {
             text_single = {
               name = "speed_value"
+# debugging aid 
+#              text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getSiege_sort_value')]"
               text = "[GuiScope.SetRoot( Character.MakeScope ).AddScope( 'actor', GetPlayer.MakeScope ).ScriptValue('cmdr_getSiege_display')|+0%]"
               default_format = "#high"
             }

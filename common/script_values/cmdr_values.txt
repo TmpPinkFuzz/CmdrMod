@@ -42,8 +42,9 @@ cmdr_siege_effectiveness = {
 cmdr_getSiege_sort_value = {
   value = cmdr_siege_effectiveness
 
-  multiply = 10000
-}
+  multiply = 1000
+  add = cmdr_getSpeed_sort_value
+}       
 
 cmdr_getSiege_display = {
   value = cmdr_siege_effectiveness
