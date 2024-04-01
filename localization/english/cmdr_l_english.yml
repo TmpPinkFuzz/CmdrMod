@@ -1,0 +1,19 @@
+﻿l_english:
+
+# TODO: find way to extract army name
+#  CMDR_SELECT_COMMANDER_CAPTION:0    "#T Select new [commander|E] for #! #V [GetPlayer.MakeScope.Var('cmdr_army_name').GetValue] #!"
+
+  CMDR_SELECT_COMMANDER_CAPTION:0     "#T Select new [commander|E] #!"
+
+  CMDR_HEADER_COMBAT:0                "[cmdr_combat|E]
+  CMDR_HEADER_MOVEMENT:0              "[cmdr_movement|E]"
+  CMDR_HEADER_SIEGE:0                 "[cmdr_siege|E]
+
+
+  game_concept_cmdr_combat:0          "Combat"
+  game_concept_cmdr_movement:0        "Movement"
+  game_concept_cmdr_siege:0           "Siege"
+
+  game_concept_cmdr_combat_desc:0     "This column is pretty much the same as the vanilla Select Commanders window, with the except that no guests are shown, nor are any characters that cannot currently be assigned as a [commander|E].\n\nThe list is sorted by commander [advantage|E], and will be filtered by the [commander_trait|E] buttons above same as the other 2 columns."
+  game_concept_cmdr_movement_desc:0   "This column is designed for the ease in selecting the character with the highest speed bonus available to move your [army|E] from place to place.\n\nThe people in this list are automatically sorted by their movement speed bonuses from both [traits|E] and [cultural|E] [traditions|E], which are displayed at the lower right corner of each character.\n\nNote that any characters serving as [knights|E] will not appear in this list, as assigning a knight as a [commander|E] will sometimes transfer the knight themselves to that army out of the original army they were in."
+  game_concept_cmdr_siege_desc:0      "This column is designed for the quick selection of a character to command any sieges you lead against the enemy.\n\nThe characters in this list are automatically filtered by the military engineer [trait|E].\n\nThen, the list is sorted by the quality of the engineer, with any Besieger [accolade|E] coming first, then any engineers with a [cultural|E] [tradition|E] giving a siege speed bonus for [revolts|E].  This is followed up by all your remaining engineers with ones having a siege speed penalty from cultural traditions last.\n\nFor any given quality of siege speed rating, the list is further sorted by their speed bonus, so that you can easily place characters with both the military engineer and organizer traits into [armies|E] of [levies|E] and siege weapon [regiments|E] and not have to swap them around when moving from one location to the next.\n\nNote that just like the movement list, any characters that are [knights|E] are not included in the list to avoid those knights getting transferred into a different army than intended due to being made their [commander|E]."

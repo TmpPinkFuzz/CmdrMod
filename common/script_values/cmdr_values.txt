@@ -1,0 +1,95 @@
+﻿
+cmdr_getSpeed = {
+  value = 0
+  if = { limit = { culture = { has_cultural_tradition = tradition_horse_lords } }            add = 10 }
+  if = { limit = { culture = { has_cultural_tradition = tradition_saharan_nomads } }         add = 10 }
+  if = { limit = { culture = { has_cultural_tradition = tradition_fp2_strategy_gamers } }    add = 10 }
+  if = { limit = { culture = { has_cultural_tradition = tradition_caravaneers } }            add =  5 }
+
+#  if = { limit = { has_trait = winter_soldier OR = { current_month < 3 current_month > 9 } } add = 25 }
+  if = { limit = { has_trait = organizer }                                                   add = 25 }
+}
+
+cmdr_getSpeed_sort_value = {
+  value = cmdr_getSpeed
+
+  if = { limit = { has_trait = military_engineer }  add = 3 }
+  if = { limit = { has_trait = logistician }        add = 1 }
+  if = { limit = { has_trait = reaver }             add = 1 }
+}
+
+cmdr_getSpeed_display = {
+  value = cmdr_getSpeed
+  divide = 100
+}
+
+cmdr_siege_effectiveness = {
+  value = 100
+  if = {
+    limit = { culture = { has_cultural_tradition = tradition_hussar } }
+    add = -20
+  }
+  if = {
+    limit = { culture = { has_cultural_tradition = tradition_hit_and_run } }
+    add = -20
+  }
+  if = {
+    limit = { culture = { has_cultural_tradition = tradition_ruling_caste } }
+    add = 25
+  }
+}
+
+cmdr_getSiege_sort_value = {
+  value = cmdr_siege_effectiveness
+
+  multiply = 10000
+}
+
+cmdr_getSiege_display = {
+  value = cmdr_siege_effectiveness
+  add = -100
+  divide = 100
+}
+
+cmdr_getAdvantage = {
+  value = martial
+  if = {
+    limit = { this = scope:actor }        # leading own soldiers
+    add = 5
+  }
+  if = {
+    limit = { has_perk = never_back_down_perk }
+    add = 5
+  }
+  if = {
+    limit = { culture = { has_cultural_tradition = tradition_hussar } }
+    add = -2
+  }
+  if = {
+    limit = { culture = { has_cultural_tradition = tradition_hit_and_run } }
+    add = -2
+  }
+}
+
+cmdr_getAdvantage_sort_value = {
+  value = cmdr_getAdvantage
+}
+
+cmdr_filter_logistician           = { value = global_var:cmdr_filter_logistician }
+cmdr_filter_winter_soldier        = { value = global_var:cmdr_filter_winter_soldier }
+cmdr_filter_organizer             = { value = global_var:cmdr_filter_organizer }
+cmdr_filter_cautious_leader       = { value = global_var:cmdr_filter_cautious_leader }
+cmdr_filter_forest_fighter        = { value = global_var:cmdr_filter_forest_fighter }
+cmdr_filter_rough_terrain_expert  = { value = global_var:cmdr_filter_rough_terrain_expert }
+cmdr_filter_open_terrain_expert   = { value = global_var:cmdr_filter_open_terrain_expert }
+cmdr_filter_holy_warrior          = { value = global_var:cmdr_filter_holy_warrior }
+cmdr_filter_reckless              = { value = global_var:cmdr_filter_reckless }
+cmdr_filter_reaver                = { value = global_var:cmdr_filter_reaver }
+cmdr_filter_jungle_stalker        = { value = global_var:cmdr_filter_jungle_stalker }
+cmdr_filter_desert_warrior        = { value = global_var:cmdr_filter_desert_warrior }
+cmdr_filter_flexible_leader       = { value = global_var:cmdr_filter_flexible_leader }
+cmdr_filter_forder                = { value = global_var:cmdr_filter_forder }
+cmdr_filter_unyielding_defender   = { value = global_var:cmdr_filter_unyielding_defender }
+cmdr_filter_aggressive_attacker   = { value = global_var:cmdr_filter_aggressive_attacker }
+cmdr_filter_military_engineer     = { value = global_var:cmdr_filter_military_engineer }
+

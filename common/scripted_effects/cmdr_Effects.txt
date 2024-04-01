@@ -1,0 +1,154 @@
+﻿
+
+cmdr_populate_all_lists = {
+  cmdr_populate_combat_list = yes
+  cmdr_populate_movement_list = yes
+  cmdr_populate_siege_list = yes
+}
+
+cmdr_toggle_global_variable = {
+  if = {
+    limit = { $VAR$ = 0 }
+    set_global_variable = { name = $VAR$ value = 1 }
+  }
+  else = {
+    set_global_variable = { name = $VAR$ value = 0 }
+  }
+}
+
+cmdr_populate_movement_list = {
+  clear_variable_list = cmdr_movement_list
+  save_scope_as = actor
+  ordered_living_character = {
+    limit = {
+      OR = {
+        liege = scope:actor                                           # must work the player
+        this =  scope:actor                                           # or be the player
+      }
+      can_be_commander_now_trigger = { ARMY_OWNER = scope:actor } # checks incapable, adult, alive, gender rules
+      is_commanding_army = no
+      is_knight = no
+
+      passes_trait_filter = { TRAIT = logistician }
+      passes_trait_filter = { TRAIT = winter_soldier }
+      passes_trait_filter = { TRAIT = organizer }
+      passes_trait_filter = { TRAIT = cautious_leader }
+      passes_trait_filter = { TRAIT = forest_fighter }
+      passes_trait_filter = { TRAIT = rough_terrain_expert }
+      passes_trait_filter = { TRAIT = open_terrain_expert }
+      passes_trait_filter = { TRAIT = holy_warrior }
+      passes_trait_filter = { TRAIT = reckless }
+      passes_trait_filter = { TRAIT = reaver }
+      passes_trait_filter = { TRAIT = jungle_stalker }
+      passes_trait_filter = { TRAIT = desert_warrior }
+      passes_trait_filter = { TRAIT = flexible_leader }
+      passes_trait_filter = { TRAIT = forder }
+      passes_trait_filter = { TRAIT = unyielding_defender }
+      passes_trait_filter = { TRAIT = aggressive_attacker }
+      passes_trait_filter = { TRAIT = military_engineer }
+    }         
+    order_by = {
+      value = cmdr_getSpeed_sort_value
+#      multiply = -1
+    }
+    max = 10
+    check_range_bounds = no
+    
+    save_scope_as = recipient
+    root = {
+      add_to_variable_list = { name = cmdr_movement_list target = scope:recipient }
+    }
+  }
+}
+
+cmdr_populate_siege_list = {
+  clear_variable_list = cmdr_siege_list
+  save_scope_as = actor
+  ordered_living_character = {
+    limit = {
+      OR = {
+        liege = scope:actor                                           # must work the player
+        this =  scope:actor                                           # or be the player
+      }
+      can_be_commander_now_trigger = { ARMY_OWNER = scope:actor } # checks incapable, adult, alive, gender rules
+      has_trait = military_engineer                                 # must have engineer trait
+      is_commanding_army = no
+      is_knight = no
+
+      passes_trait_filter = { TRAIT = logistician }
+      passes_trait_filter = { TRAIT = winter_soldier }
+      passes_trait_filter = { TRAIT = organizer }
+      passes_trait_filter = { TRAIT = cautious_leader }
+      passes_trait_filter = { TRAIT = forest_fighter }
+      passes_trait_filter = { TRAIT = rough_terrain_expert }
+      passes_trait_filter = { TRAIT = open_terrain_expert }
+      passes_trait_filter = { TRAIT = holy_warrior }
+      passes_trait_filter = { TRAIT = reckless }
+      passes_trait_filter = { TRAIT = reaver }
+      passes_trait_filter = { TRAIT = jungle_stalker }
+      passes_trait_filter = { TRAIT = desert_warrior }
+      passes_trait_filter = { TRAIT = flexible_leader }
+      passes_trait_filter = { TRAIT = forder }
+      passes_trait_filter = { TRAIT = unyielding_defender }
+      passes_trait_filter = { TRAIT = aggressive_attacker }
+    }         
+    order_by = {
+      value = cmdr_getSiege_sort_value
+#      multiply = -1
+    }
+    max = 10
+    check_range_bounds = no
+    
+    save_scope_as = recipient
+
+    root = {
+      add_to_variable_list = { name = cmdr_siege_list target = scope:recipient }
+    }
+  }
+}
+
+cmdr_populate_combat_list = {
+  clear_variable_list = cmdr_combat_list
+  save_scope_as = actor
+  ordered_living_character = {
+    limit = {
+      OR = {
+        liege = scope:actor                                           # must work the player
+        this =  scope:actor                                           # or be the player
+      }
+      can_be_commander_now_trigger = { ARMY_OWNER = scope:actor } # checks incapable, adult, alive, gender rules
+      is_commanding_army = no
+
+      passes_trait_filter = { TRAIT = logistician }
+      passes_trait_filter = { TRAIT = winter_soldier }
+      passes_trait_filter = { TRAIT = organizer }
+      passes_trait_filter = { TRAIT = cautious_leader }
+      passes_trait_filter = { TRAIT = forest_fighter }
+      passes_trait_filter = { TRAIT = rough_terrain_expert }
+      passes_trait_filter = { TRAIT = open_terrain_expert }
+      passes_trait_filter = { TRAIT = holy_warrior }
+      passes_trait_filter = { TRAIT = reckless }
+      passes_trait_filter = { TRAIT = reaver }
+      passes_trait_filter = { TRAIT = jungle_stalker }
+      passes_trait_filter = { TRAIT = desert_warrior }
+      passes_trait_filter = { TRAIT = flexible_leader }
+      passes_trait_filter = { TRAIT = forder }
+      passes_trait_filter = { TRAIT = unyielding_defender }
+      passes_trait_filter = { TRAIT = aggressive_attacker }
+      passes_trait_filter = { TRAIT = military_engineer }
+    }         
+    order_by = {
+      value = cmdr_getAdvantage_sort_value
+#      multiply = -1
+    }
+    max = 100
+    check_range_bounds = no
+    
+    save_scope_as = recipient
+    root = {
+      add_to_variable_list = { name = cmdr_combat_list target = scope:recipient }
+    }
+  }
+}
+
+

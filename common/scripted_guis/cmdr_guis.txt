@@ -1,0 +1,481 @@
+﻿
+cmdr_army_select_commander_window = {
+  scope = player
+  saved_scopes = ( army }
+
+  is_shown = { always = yes  }
+  is_valid = { always = yes  }
+  ai_is_valid = { always = no  }
+
+  effect = { 
+    debug_log = "*** cmdr_init ***"
+    set_variable = { name = cmdr_army value = scope:army }
+
+    set_global_variable = { name = cmdr_filter_logistician value = 0 }
+    set_global_variable = { name = cmdr_filter_winter_soldier value = 0 }
+    set_global_variable = { name = cmdr_filter_organizer value = 0 }
+    set_global_variable = { name = cmdr_filter_cautious_leader value = 0 }
+    set_global_variable = { name = cmdr_filter_forest_fighter value = 0 }
+    set_global_variable = { name = cmdr_filter_rough_terrain_expert value = 0 }
+    set_global_variable = { name = cmdr_filter_open_terrain_expert value = 0 }
+    set_global_variable = { name = cmdr_filter_holy_warrior value = 0 }
+    set_global_variable = { name = cmdr_filter_reckless value = 0 }
+    set_global_variable = { name = cmdr_filter_reaver value = 0 }
+    set_global_variable = { name = cmdr_filter_jungle_stalker value = 0 }
+    set_global_variable = { name = cmdr_filter_desert_warrior value = 0 }
+    set_global_variable = { name = cmdr_filter_flexible_leader value = 0 }
+    set_global_variable = { name = cmdr_filter_forder value = 0 }
+    set_global_variable = { name = cmdr_filter_unyielding_defender value = 0 }
+    set_global_variable = { name = cmdr_filter_aggressive_attacker value = 0 }
+    set_global_variable = { name = cmdr_filter_military_engineer value = 0 }
+
+    cmdr_populate_all_lists = yes
+  }
+}
+
+cmdr_set_commander = {
+  scope = character
+  saved_scopes = ( actor }
+
+  is_shown = { always = yes  }
+  is_valid = { always = yes  }
+  ai_is_valid = { always = no  }
+
+  effect = { 
+    save_scope_as = commander
+    scope:actor = {
+      var:cmdr_army = {
+        assign_commander = scope:commander
+      }
+    }
+  }
+}
+
+cmdr_remove_commander = {
+  scope = character
+  saved_scopes = ( actor }
+
+  is_shown = { always = yes  }
+  is_valid = { always = yes  }
+  ai_is_valid = { always = no  }
+
+  effect = { 
+    save_scope_as = commander
+    scope:actor = {
+      var:cmdr_army = {
+        remove_commander = yes
+      }
+    }
+  }
+}
+
+cmdr_clear_all_data_gui = {
+  scope = player
+  is_shown = { always = yes  }
+  is_valid = { always = yes  }
+  ai_is_valid = { always = no  }
+
+  effect = { 
+    clear_variable_list = cmdr_combat_list
+    clear_variable_list = cmdr_movement_list
+    clear_variable_list = cmdr_siege_list
+    remove_variable = cmdr_army
+    remove_global_variable = cmdr_filter_logistician
+  }
+}
+
+cmdr_has_logistician = {
+  scope = character
+
+  is_shown = { has_trait = logistician }
+}
+
+cmdr_has_military_engineer = {
+  scope = character
+
+  is_shown = { has_trait = military_engineer }
+}
+
+cmdr_has_aggressive_attacker = {
+  scope = character
+
+  is_shown = { has_trait = aggressive_attacker }
+}
+
+cmdr_has_unyielding_defender = {
+  scope = character
+
+  is_shown = { has_trait = unyielding_defender }
+}
+
+cmdr_has_forder = {
+  scope = character
+
+  is_shown = { has_trait = forder }
+}
+
+cmdr_has_flexible_leader = {
+  scope = character
+
+  is_shown = { has_trait = flexible_leader }
+}
+
+cmdr_has_desert_warrior = {
+  scope = character
+
+  is_shown = { has_trait = desert_warrior }
+}
+
+cmdr_has_jungle_stalker = {
+  scope = character
+
+  is_shown = { has_trait = jungle_stalker }
+}
+
+cmdr_has_reaver = {
+  scope = character
+
+  is_shown = { has_trait = reaver }
+}
+
+cmdr_has_reckless = {
+  scope = character
+
+  is_shown = { has_trait = reckless }
+}
+
+cmdr_has_holy_warrior = {
+  scope = character
+
+  is_shown = { has_trait = holy_warrior }
+}
+
+cmdr_has_open_terrain_expert = {
+  scope = character
+
+  is_shown = { has_trait = open_terrain_expert }
+}
+
+cmdr_has_rough_terrain_expert = {
+  scope = character
+
+  is_shown = { has_trait = rough_terrain_expert }
+}
+
+cmdr_has_forest_fighter = {
+  scope = character
+
+  is_shown = { has_trait = forest_fighter }
+}
+
+cmdr_has_cautious_leader = {
+  scope = character
+
+  is_shown = { has_trait = cautious_leader }
+}
+
+cmdr_has_organizer = {
+  scope = character
+
+  is_shown = { has_trait = organizer }
+}
+
+cmdr_has_winter_soldier = {
+  scope = character
+
+  is_shown = { has_trait = winter_soldier }
+}
+
+cmdr_has_blind = {
+  scope = character
+
+  is_shown = { has_trait = blind }
+}
+
+cmdr_has_ill = {
+  scope = character
+
+  is_shown = { has_trait = ill }
+}
+
+cmdr_has_pneumonic = {
+  scope = character
+
+  is_shown = { has_trait = pneumonic }
+}
+
+cmdr_has_great_pox = {
+  scope = character
+
+  is_shown = { has_trait = great_pox }
+}
+
+cmdr_has_early_great_pox = {
+  scope = character
+
+  is_shown = { has_trait = early_great_pox }
+}
+
+cmdr_has_lovers_pox = {
+  scope = character
+
+  is_shown = { has_trait = lovers_pox }
+}
+
+cmdr_has_leper = {
+  scope = character
+
+  is_shown = { has_trait = leper }
+}
+
+cmdr_has_wounded_1 = {
+  scope = character
+
+  is_shown = { has_trait = wounded_1 }
+}
+
+cmdr_has_wounded_2 = {
+  scope = character
+
+  is_shown = { has_trait = wounded_2 }
+}
+
+cmdr_has_wounded_3 = {
+  scope = character
+
+  is_shown = { has_trait = wounded_3 }
+}
+
+cmdr_has_maimed = {
+  scope = character
+
+  is_shown = { has_trait = maimed }
+}
+
+cmdr_has_one_eyed = {
+  scope = character
+
+  is_shown = { has_trait = one_eyed }
+}
+
+cmdr_has_one_legged = {
+  scope = character
+
+  is_shown = { has_trait = one_legged }
+}
+
+cmdr_has_disfigured = {
+  scope = character
+
+  is_shown = { has_trait = disfigured }
+}
+
+cmdr_has_infirm = {
+  scope = character
+
+  is_shown = { has_trait = infirm }
+}
+
+cmdr_has_incapable = {
+  scope = character
+
+  is_shown = { has_trait = incapable }
+}
+
+cmdr_has_gout_ridden = {
+  scope = character
+
+  is_shown = { has_trait = gout_ridden }
+}
+
+cmdr_has_consumption = {
+  scope = character
+
+  is_shown = { has_trait = consumption }
+}
+
+cmdr_has_cancer = {
+  scope = character
+
+  is_shown = { has_trait = cancer }
+}
+
+cmdr_has_typhus = {
+  scope = character
+
+  is_shown = { has_trait = typhus }
+}
+
+cmdr_has_bubonic_plague = {
+  scope = character
+
+  is_shown = { has_trait = bubonic_plague }
+}
+
+cmdr_has_smallpox = {
+  scope = character
+
+  is_shown = { has_trait = smallpox }
+}
+
+cmdr_logistician_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_logistician = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_logistician }
+    cmdr_populate_all_lists = yes
+  }
+}
+
+cmdr_winter_soldier_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_winter_soldier = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_winter_soldier }
+    cmdr_populate_all_lists = yes
+  }
+}
+
+cmdr_organizer_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_organizer = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_organizer }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_cautious_leader_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_cautious_leader = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_cautious_leader }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_forest_fighter_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_forest_fighter = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_forest_fighter }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_rough_terrain_expert_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_rough_terrain_expert = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_rough_terrain_expert }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_open_terrain_expert_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_open_terrain_expert = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_open_terrain_expert }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_holy_warrior_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_holy_warrior = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_holy_warrior }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_reckless_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_reckless = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_reckless }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_reaver_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_reaver = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_reaver }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_jungle_stalker_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_jungle_stalker = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_jungle_stalker }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_desert_warrior_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_desert_warrior = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_desert_warrior }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_flexible_leader_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_flexible_leader = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_flexible_leader }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_forder_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_forder = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_forder }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_unyielding_defender_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_unyielding_defender = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_unyielding_defender }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_aggressive_attacker_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_aggressive_attacker = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_aggressive_attacker }
+    cmdr_populate_all_lists = yes
+  }
+}
+cmdr_military_engineer_filter = {
+  scope = player
+
+  is_shown = { cmdr_filter_military_engineer = 1 }
+  effect = {
+    cmdr_toggle_global_variable = { VAR = cmdr_filter_military_engineer }
+    cmdr_populate_all_lists = yes
+  }
+}
+
+cmdr_is_knight = {
+  scope = character
+
+  is_shown = { is_knight = yes }
+}

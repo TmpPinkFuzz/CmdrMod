@@ -1,0 +1,5 @@
+﻿
+
+passes_trait_filter = {
+  OR = { cmdr_filter_$TRAIT$ = 0 has_trait = $TRAIT$ }
+}

@@ -1,0 +1,4 @@
+﻿
+cmdr_combat = { }
+cmdr_movement = { }
+cmdr_siege = { }
